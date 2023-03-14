@@ -1,7 +1,14 @@
 ## Changelog for USDA Farmers Market Registrations Post-Pandemic: Transitioning to Online Directories
 
 **Identify and select relevant columns to questions:**<br>
-listing_id, update_time, listing_name, location_address, location_x, location_y, location_site, location_indoor
+* listing_id
+* update_time
+* listing_name
+* location_address
+* location_x
+* location_y
+* location_site
+* location_indoor
 
 **Reformat:**<br>
 * Check data type
@@ -12,14 +19,13 @@ listing_id, update_time, listing_name, location_address, location_x, location_y,
 
 
 **Export to csv and upload into google sheets (v7):**<br>
-Change Zip code column to string type
-Add conditional formatting to zip_code column: 
-	=len(Q2:Q1057)<5
+* Change Zip code column to string type
+* Add conditional formatting to zip_code column: <br>
+	=len(Q2:Q1057)<5 <br>
 	=len(Q2:Q1057)>5
-Fix any zip code and state NAs or errors. 
-Fix street, city, and coordinate NAs and errors
-(Word case, missing streets, incorrect cities)
-Remove 2023 data
+* Fix any zip code and state NAs or errors. 
+* Fix street, city, and coordinate NAs and errors (Word case, missing streets, incorrect cities)
+* Remove 2023 data
 
 **Use pivot table in spreadsheets to check unique location sites and standardize them. Below are the groupings made for fm_df_v9:** <br>
 Plaza/Square/Common - Arts Walk & Plaza, Back common, Civic Plaza, public lot, donated private land, Veterans Plaza, Welburn Square
