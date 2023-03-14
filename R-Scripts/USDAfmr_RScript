@@ -1,0 +1,169 @@
+#USDA Farmers Market Registrations Post-Pandemic: Transitioning to Online Directories R-Documentation
+
+library(tidyverse)
+
+fm_df <- farmersmarket_2023_125205119
+
+#Identify and select relevant columns to questions
+colnames(fm_df)
+
+fm_df_v2 <- fm_df %>% 
+  select('listing_id', 'update_time', 'listing_name', 'location_address', 'location_x', 'location_y', 'location_site', 'location_indoor')
+
+#Check data type
+glimpse(fm_df_v2)
+
+#Separate date-time column
+fm_df_v3 <- tidyr::separate(fm_df_v2, update_time, c('date', 'time'), sep = ' ')
+
+#Check data type
+glimpse(fm_df_v3)
+
+#Add date columns
+library(lubridate)
+
+fm_df_v3$date <- as.Date(fm_df_v3$date) #The default format is yyyy-mm-dd
+fm_df_v3$month <- format(as.Date(fm_df_v3$date), "%m")
+fm_df_v3$day <- format(as.Date(fm_df_v3$date), "%d")
+fm_df_v3$year <- format(as.Date(fm_df_v3$date), "%Y")
+fm_df_v3$day_of_week <- format(as.Date(fm_df_v3$date), "%A")
+
+#Change data formats
+fm_df_v3$location_x <- as.numeric(fm_df_v3$location_x)
+fm_df_v3$location_y <- as.numeric(fm_df_v3$location_y)
+
+#Duplicate location_address as address_total for backup.
+fm_df_v4 <- fm_df_v3 %>% 
+  mutate(address_total = fm_df_v3$location_address)
+
+#Separate location_address into street, city, and state columsn
+fm_df_v5 <- tidyr::separate(fm_df_v4, location_address, c('street', 'city', 'state'), sep = ', ')
+
+#Function for extracting substring from right
+substrRight <- function(x, n){
+  substr(x, nchar(x)-n+1, nchar(x))
+}
+
+#Create zip code column
+fm_df_v6 <- fm_df_v5 %>% 
+  mutate(zip_code = substrRight(fm_df_v5$state, 6))
+
+#Create state2 column
+library(stringr)
+
+fm_df_v7 <- fm_df_v6 %>% 
+  mutate(state2 = str_sub(fm_df_v6$state, end = -6))
+
+#Trim white space of zip_code and state2
+
+fm_df_v7$zip_code <- trimws(fm_df_v7$zip_code)
+fm_df_v7$state2 <- trimws(fm_df_v7$state2)
+
+#Check data type
+glimpse(fm_df_v7)
+
+#Export to google sheets for location cleanup
+write.csv(fm_df_v7, file = 'fm_df_v7.csv')
+
+#Import fm_df_v8.csv into RStudio
+fm_df_v9 <- read_csv("fm_df_v9.csv")
+
+#Exploratory Descriptive Statistics
+
+#Count farmers markets by year
+year_count <- fm_df_v9 %>% 
+  group_by(year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop') %>% 
+  arrange(desc(total_count))
+year_count_w <- spread(year_count, year, total_count)
+
+#Count farmers markets by state
+state_count <- fm_df_v9 %>% 
+  group_by(state) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop') %>% 
+  arrange(desc(total_count))
+
+#Count farmers markets by state per year
+state_count_y <- fm_df_v9 %>% 
+  group_by(state, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+state_count_y_w <- spread(state_count_y, year, total_count)
+
+#Count farmers markets by indoor by year
+in_count_y <- fm_df_v9 %>% 
+  group_by(location_indoor, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+in_count_y_w <- spread(in_count_y, year, total_count)
+
+#Count farmers markets by indoor by state
+state_count_indoor <- fm_df_v9 %>% 
+  group_by(state, location_indoor) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+state_count_indoor_w <- spread(state_count_indoor, location_indoor, total_count)
+
+#Subset states with highest entire + part time indoor
+IL <- subset(fm_df_v9, state == "Illinois")
+IN <- subset(fm_df_v9, state == "Indiana")
+KY <- subset(fm_df_v9, state == "Kentucky")
+MI <- subset(fm_df_v9, state == "Michigan")
+NC <- subset(fm_df_v9, state == "North Carolina")
+WI <- subset(fm_df_v9, state == "Wisconsin")
+
+#Count farmers markets by indoor by year for IL
+in_count_IL_y <- IL %>% 
+  group_by(location_indoor, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+in_count_IL_y_w <- spread(in_count_IL_y, year, total_count)
+
+#Count farmers markets by indoor by year for IN
+in_count_IN_y <- IN %>% 
+  group_by(location_indoor, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+in_count_IN_y_w <- spread(in_count_IN_y, year, total_count)
+
+#Count farmers markets by indoor by year for KY
+in_count_KY_y <- KY %>% 
+  group_by(location_indoor, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+in_count_KY_y_w <- spread(in_count_KY_y, year, total_count)
+
+#Count farmers markets by indoor by year for MI
+in_count_MI_y <- MI %>% 
+  group_by(location_indoor, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+in_count_MI_y_w <- spread(in_count_MI_y, year, total_count)
+
+#Count farmers markets by indoor by year for NC
+in_count_NC_y <- NC %>% 
+  group_by(location_indoor, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+in_count_NC_y_w <- spread(in_count_NC_y, year, total_count)
+
+#Count farmers markets by indoor by year for WI
+in_count_WI_y <- WI %>% 
+  group_by(location_indoor, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+in_count_WI_y_w <- spread(in_count_WI_y, year, total_count)
+
+#Count farmers markets by location_site per year
+site_count_y <- fm_df_v9 %>% 
+  group_by(location_site, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+site_count_y_w <- spread(site_count_y, year, total_count)
+
+#Count farmers markets by indoor by year
+in_count_y <- fm_df_v9 %>% 
+  group_by(location_indoor, year) %>% 
+  dplyr::summarise(total_count=n(),.groups='drop')%>% 
+  arrange(desc(total_count))
+in_count_y_w <- spread(in_count_y, year, total_count)
