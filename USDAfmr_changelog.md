@@ -69,4 +69,3 @@ Formula: =countif($B$2:$B$1153, B2)>1
 * City
 * location_x
 * location_y
-*
