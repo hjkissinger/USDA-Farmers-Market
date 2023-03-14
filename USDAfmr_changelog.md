@@ -1,4 +1,4 @@
-## Changelog for USDA Farmers Market Registrations Post-Pandemic: Transitioning to Online Directories
+## Google Sheets Changelog for USDA Farmers Market Registrations Post-Pandemic: Transitioning to Online Directories
 
 **Identify and select relevant columns to questions:**<br>
 * listing_id
@@ -28,25 +28,37 @@
 * Remove 2023 data
 
 **Use pivot table in spreadsheets to check unique location sites and standardize them. Below are the groupings made for fm_df_v9:** <br>
-Plaza/Square/Common - Arts Walk & Plaza, Back common, Civic Plaza, public lot, donated private land, Veterans Plaza, Welburn Square
-Closed-off public street- On I street NW between…, closed off public street
-Farm- on a farm from…
-Federal/state government building grounds
-Local government building grounds
-Private business- outdoor basketball court, private business parking lot, business parking lots and courtyards and…, Coffee Creek…
-Building- own retail building, co-located with wholesale market facility, Non-profit venue
-Park- Cope’s park is a subsection…, public park
-Healthcare institution Faith-based institution
-Educational institution
+* Plaza/Square/Common - Arts Walk & Plaza, Back common, Civic Plaza, public lot, donated private land, Veterans Plaza, Welburn Square
+* Closed-off public street- On I street NW between…, closed off public street
+* Farm- on a farm from…
+* Federal/state government building grounds
+* Local government building grounds
+* Private business- outdoor basketball court, private business parking lot, business parking lots and courtyards and…, Coffee Creek…
+* Building- own retail building, co-located with wholesale market facility, Non-profit venue
+* Park- Cope’s park is a subsection…, public park
+* Healthcare institution
+* Faith-based institution
+* Educational institution
 
 **Use conditional formatting to highlight NAs in the location_site and location_indoor. Then look up NAs’ addresses on Google and replace NAs with the appropriate standardized grouping names:** <br>
-Closed-off public street, Educational institution, Faith-based institution, farm, federal/state government ground, healthcare institution, local government ground, park, Plaza/Square/Commons, Private business
+* Closed-off public street
+* Educational institution
+* Faith-based institution
+* Farm
+* Federal/state government ground
+* Healthcare institution
+* Local government ground
+* Park
+* Plaza/Square/Commons
+* Private business
 
 **Use pivot table in spreadsheets to check unique location sites and standardize them. Below are the groupings made for fm_df_v9:** <br>
-Entire time open indoor, no indoor, part time open indoor.
+* Entire time open indoor
+* No indoor
+* Part time open indoor.
 
 **Use conditional formatting to locate duplicates in the listing id:**<br>
-=countif($B$2:$B$1153, B2)>1
-If present, remove NAs in listing_id
+* If present, remove NAs in listing_id <br>
+Formula: =countif($B$2:$B$1153, B2)>1
 
 **Import back into RStudio: fm_df_v9**
