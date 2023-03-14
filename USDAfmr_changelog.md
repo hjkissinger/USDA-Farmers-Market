@@ -62,3 +62,11 @@
 Formula: =countif($B$2:$B$1153, B2)>1
 
 **Import back into RStudio: fm_df_v9**
+
+**Create Geocode spreadsheet for Tableau visualizations. Copy and paste columns into a new spreadsheet in the following order:**
+* Country
+* State
+* City
+* location_x
+* location_y
+*
