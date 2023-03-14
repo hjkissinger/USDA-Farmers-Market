@@ -1,14 +1,14 @@
-# Changelog for USDA Farmers Market Registrations Post-Pandemic: Transitioning to Online Directories
+## Changelog for USDA Farmers Market Registrations Post-Pandemic: Transitioning to Online Directories
 
 **Identify and select relevant columns to questions:**<br>
 listing_id, update_time, listing_name, location_address, location_x, location_y, location_site, location_indoor
 
 **Reformat:**<br>
-Check data type
-Separate Date and time
-Add date columns
-Change data formats
-Separate out location_address into new columns (street, city, state, zip code)
+* Check data type
+* Separate Date and time
+* Add date columns
+* Change data formats
+* Separate out location_address into new columns (street, city, state, zip code)
 
 
 **Export to csv and upload into google sheets (v7):**<br>
